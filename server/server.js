@@ -1,30 +1,29 @@
 import express from 'express';
 import startDatabase from './dbConfig/db.js';
-// import getPrice from './controllers/getPrice.js';
 import dotenv from 'dotenv';
 import xmlparser from 'express-xml-parser';
-
-import path from 'path';
+import cors from 'cors';
 import LightSaberRouter from './routes/LightSaberRouter.js';
-import createLightSaber from './controllers/createLightSaber.js';
-// const __dirname = path.resolve();
+import CrystalRouter from './routes/CrystalRouter.js';
+import OrderRouter from './routes/OrderRouter.js';
 
 dotenv.config();
 const app = express();
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(xmlparser());
 
+app.use(cors());
+
 const startServer = () => {
    try {
       startDatabase();
-      app.listen(process.env.PORT, () => {
-         console.log(`Server Started on Port ${process.env.PORT}`);
-         //  getPrice(__dirname + '/assets/example.xml', 10, 'Master Jedi Saber');
+      app.listen(process.env.PORT, () => console.log(`Server Started on Port ${process.env.PORT}`));
 
-         app.use('/jedisabershop', LightSaberRouter);
-      });
+      // Routers
+      app.use('/jedisabershop/order', OrderRouter);
+      app.use('/jedisabershop', LightSaberRouter);
+      app.use('/crystals', CrystalRouter);
    } catch (err) {
       console.e.log(err.message);
    }

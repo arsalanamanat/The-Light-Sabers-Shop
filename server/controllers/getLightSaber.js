@@ -4,9 +4,9 @@ const getLightSaber = async (req, res) => {
    try {
       const id = req.params.id;
       const saber = await Sabers.findOne({ id: id });
-      res.status(400).json(saber);
+      res.status(200).json({ success: true, data: saber });
    } catch (err) {
-      console.log(err.message);
+      res.status(400).json({ success: false, msg: err.message });
    }
 };
 
